@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Productos</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> <!-- Fuente de FontAwesome para iconos -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #3d0101;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #3d0101;
+            color: rgb(20, 247, 255);
+            padding: 15px;
+            text-align: center;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .product-card {
+            background-color: rgb(126, 117, 0);
+            border: 1px solid #1f0202;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .product-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .product-price {
+            color: #061407;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .add-to-cart-btn {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .cart {
+            background-color: #f1f1f1;
+            padding: 10px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        .cart-icon {
+            font-size: 20px;
+            color: #388e3c;
+        }
+
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #25d366;
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .whatsapp-btn:hover {
+            background-color: #128c7e;
+        }
+
+        /* Estilo del botón de vaciar el carrito */
+        .empty-cart-btn {
+            background-color: #f44336;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .empty-cart-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Catálogo de Productos</h1>
+    </header>
+
+    <div class="product-grid" id="productGrid">
+        <!-- Los productos se cargarán dinámicamente aquí -->
+    </div>
+
+    <div class="cart" onclick="showCart()">
+        <span class="cart-icon">🛒</span>
+        <span id="cart-count">0</span>
+    </div>
+
+    <div class="whatsapp-btn" onclick="contactWhatsApp()">
+        <i class="fab fa-whatsapp"></i> <!-- Icono de WhatsApp de FontAwesome -->
+    </div>
+
+    <!-- Botón para vaciar el carrito -->
+    <div id="emptyCartContainer" style="position: fixed; bottom: 80px; right: 20px;">
+        <button class="empty-cart-btn" onclick="emptyCart()">Vaciar carrito</button>
+    </div>
+
+    <script>
+        // Datos de ejemplo de productos
+        const products = [
+            { id: 1, name: "LIMITED GRYP", price: 7000, image: "LIMITED GRYP.jpeg" },
+            { id: 2, name: "MAXSTEEL", price: 6000, image: "MAXSTEEL.jpeg" },
+            { id: 3, name: "MAZDA RX7", price: 7000, image: "MAZDA RX7.jpeg" },
+            { id: 4, name: "49' DRAG MERC", price: 7000, image: "49' DRAG MERC.jpeg" },
+            { id: 5, name: "67' LOTUS", price: 6000, image: "67' LOTUS.jpeg" },
+            { id: 6, name: "77' PONTIAC FIREBIRD", price: 8000, image: "77'PONTIAC FIREBIRD.jpeg" },
+            { id: 7, name: "BOOM CAR", price: 6000, image: "BOOM CAR.jpeg" },
+            { id: 8, name: "DEORA III", price: 6000, image: "DEORA III.jpeg" },
+            { id: 9, name: "DUNE DADDY", price: 6000, image: "DUNE DADDY.jpeg" },
+            { id: 10, name: "FLIPPIN FAST", price: 6000, image: "FLIPPIN FAST.jpeg" },
+            { id: 11, name: "FORD SUPERVAN 4", price: 6000, image: "FORD SUPERVAN 4}.jpeg" },
+            { id: 12, name: "HYDROATA MERC", price: 7000, image: "HYDROATA MERC.jpeg" },
+            { id: 13, name: "JAGUAR F TYPR", price: 8000, image: "JAGUAR F TYPR.jpeg" },
+            { id: 14, name: "NISSAN SKYLYNE", price: 7000, image: "NISSAN SKYLYNE.jpeg" },
+            { id: 15, name: "PIRANHA", price: 6000, image: "PIRANHA.jpeg" },
+            { id: 16, name: "RAVENGER ST", price: 7000, image: "RAVENGER ST.jpeg" },
+            { id: 17, name: "SUSHI", price: 6000, image: "SUSHI.jpeg" },
+            { id: 18, name: "TERRA TRACKTYL", price: 6000, image: "TERRA TRACKTYL.jpeg" },
+            { id: 19, name: "VOLKSWAGEN ID BUZZ", price: 6000, image: "VOLKSWAGEN ID BUZZ.jpeg" }
+        ];
+
+        // Función para cargar los productos en la página
+        function loadProducts() {
+            const productGrid = document.getElementById('productGrid');
+            productGrid.innerHTML = ''; // Limpiar el grid antes de agregar productos
+
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.classList.add('product-card');
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-price">$${product.price}</div>
+                    <button class="add-to-cart-btn" onclick="addToCart(${product.id})">Agregar al carrito</button>
+                `;
+                productGrid.appendChild(productCard);
+            });
+        }
+
+        // Función para agregar productos al carrito
+        function addToCart(productId) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                cart.push(product);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+            }
+        }
+
+        // Función para mostrar el carrito
+        function showCart() {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let cartContent = 'Carrito de compras:\n';
+            cart.forEach((item, index) => {
+                cartContent += `${index + 1}. ${item.name} - $${item.price}\n`;
+            });
+            alert(cartContent);
+        }
+
+        // Función para vaciar el carrito
+        function emptyCart() {
+            if (confirm("¿Estás seguro de que deseas vaciar el carrito?")) {
+                localStorage.removeItem('cart');
+                updateCartCount();
+                alert("El carrito ha sido vaciado.");
+            }
+        }
+
+        // Función para actualizar el contador del carrito
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            document.getElementById('cart-count').textContent = cart.length;
+        }
+
+        // Función para contactar a través de WhatsApp con los productos del carrito
+        function contactWhatsApp() {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart.length === 0) {
+                alert("¡Tu carrito está vacío!");
+                return;
+            }
+
+            let message = "¡Hola! Estoy interesado en los siguientes productos:\n\n";
+            cart.forEach(item => {
+                message += `${item.name} - $${item.price}\n`;
+            });
+
+            const phoneNumber = "5493515391020"; // Número de WhatsApp del negocio
+            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(url, "_blank");
+        }
+
+        // Cargar los productos al inicio
+        window.onload = () => {
+            loadProducts();
+            updateCartCount();
+        };
+    </script>
+</body>
+</html>
