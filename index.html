@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Productos</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> <!-- Fuente de FontAwesome para iconos -->
     <style>
         body {
@@ -18,6 +17,26 @@
             color: rgb(20, 247, 255);
             padding: 15px;
             text-align: center;
+        }
+
+        /* Cartel promocional */
+        .promo-banner {
+            background: linear-gradient(90deg, #ffcc00, #ff9900);
+            color: #3d0101;
+            font-size: 22px;
+            font-weight: bold;
+            padding: 15px 10px;
+            text-align: center;
+            text-shadow: 1px 1px #fff;
+            animation: pulse 1.5s infinite;
+            border-top: 2px solid #fff700;
+            border-bottom: 2px solid #fff700;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
         }
 
         .product-grid {
@@ -100,7 +119,6 @@
             background-color: #128c7e;
         }
 
-        /* Estilo del botón de vaciar el carrito */
         .empty-cart-btn {
             background-color: #f44336;
             color: white;
@@ -121,6 +139,11 @@
         <h1>Catálogo de Productos</h1>
     </header>
 
+    <!-- Cartel promocional -->
+    <div class="promo-banner">
+        🎉 ¡Aprovechá nuestros <strong>descuentos</strong> por tiempo limitado! 🔥
+    </div>
+
     <div class="product-grid" id="productGrid">
         <!-- Los productos se cargarán dinámicamente aquí -->
     </div>
@@ -131,42 +154,38 @@
     </div>
 
     <div class="whatsapp-btn" onclick="contactWhatsApp()">
-        <i class="fab fa-whatsapp"></i> <!-- Icono de WhatsApp de FontAwesome -->
+        <i class="fab fa-whatsapp"></i>
     </div>
 
-    <!-- Botón para vaciar el carrito -->
     <div id="emptyCartContainer" style="position: fixed; bottom: 80px; right: 20px;">
         <button class="empty-cart-btn" onclick="emptyCart()">Vaciar carrito</button>
     </div>
 
     <script>
-        // Datos de ejemplo de productos
         const products = [
-            { id: 1, name: "LIMITED GRYP", price: 7000, image: "LIMITED GRYP.jpeg" },
-            { id: 2, name: "MAXSTEEL", price: 6000, image: "MAXSTEEL.jpeg" },
-            { id: 3, name: "MAZDA RX7", price: 7000, image: "MAZDA RX7.jpeg" },
-            { id: 4, name: "49' DRAG MERC", price: 7000, image: "49' DRAG MERC.jpeg" },
-            { id: 5, name: "67' LOTUS", price: 6000, image: "67' LOTUS.jpeg" },
-            { id: 6, name: "77' PONTIAC FIREBIRD", price: 8000, image: "77'PONTIAC FIREBIRD.jpeg" },
-            { id: 7, name: "BOOM CAR", price: 6000, image: "BOOM CAR.jpeg" },
-            { id: 8, name: "DEORA III", price: 6000, image: "DEORA III.jpeg" },
+            { id: 1, name: "LIMITED GRYP", price: 5000, image: "LIMITED GRYP.jpeg" },
+            { id: 2, name: "MAXSTEEL", price: 5000, image: "MAXSTEEL.jpeg" },
+            { id: 3, name: "RAPID PULSE", price: 5000, image: "RAPID PULSE.jpeg" },
+            { id: 4, name: "49' DRAG MERC", price: 6000, image: "49' DRAG MERC.jpeg" },
+            { id: 5, name: "67' LOTUS", price: 5000, image: "67' LOTUS.jpeg" },
+            { id: 6, name: "77' PONTIAC FIREBIRD", price: 6000, image: "77'PONTIAC FIREBIRD.jpeg" },
+            { id: 7, name: "BOOM CAR", price: 5000, image: "BOOM CAR.jpeg" },
+            { id: 8, name: "DEORA III", price: 5000, image: "DEORA III.jpeg" },
             { id: 9, name: "DUNE DADDY", price: 6000, image: "DUNE DADDY.jpeg" },
-            { id: 10, name: "FLIPPIN FAST", price: 6000, image: "FLIPPIN FAST.jpeg" },
+            { id: 10, name: "FLIPPIN FAST", price: 5000, image: "FLIPPIN FAST.jpeg" },
             { id: 11, name: "FORD SUPERVAN 4", price: 6000, image: "FORD SUPERVAN 4}.jpeg" },
-            { id: 12, name: "HYDROATA MERC", price: 7000, image: "HYDROATA MERC.jpeg" },
-            { id: 14, name: "NISSAN SKYLYNE", price: 7000, image: "NISSAN SKYLYNE.jpeg" },
-            { id: 15, name: "PIRANHA", price: 6000, image: "PIRANHA.jpeg" },
-            { id: 16, name: "RAVENGER ST", price: 7000, image: "RAVENGER ST.jpeg" },
-            { id: 17, name: "SUSHI", price: 6000, image: "SUSHI.jpeg" },
-            { id: 18, name: "TERRA TRACKTYL", price: 6000, image: "TERRA TRACKTYL.jpeg" },
+            { id: 12, name: "HYDROATA MERC", price: 6000, image: "HYDROATA MERC.jpeg" },
+            { id: 14, name: "NISSAN SKYLYNE", price: 6000, image: "NISSAN SKYLYNE.jpeg" },
+            { id: 15, name: "PIRANHA", price: 5000, image: "PIRANHA.jpeg" },
+            { id: 16, name: "RAVENGER ST", price: 6000, image: "RAVENGER ST.jpeg" },
+            { id: 17, name: "SUSHI", price: 5000, image: "SUSHI.jpeg" },
+            { id: 18, name: "TERRA TRACKTYL", price: 5000, image: "TERRA TRACKTYL.jpeg" },
             { id: 19, name: "VOLKSWAGEN ID BUZZ", price: 6000, image: "VOLKSWAGEN ID BUZZ.jpeg" }
         ];
 
-        // Función para cargar los productos en la página
         function loadProducts() {
             const productGrid = document.getElementById('productGrid');
-            productGrid.innerHTML = ''; // Limpiar el grid antes de agregar productos
-
+            productGrid.innerHTML = '';
             products.forEach(product => {
                 const productCard = document.createElement('div');
                 productCard.classList.add('product-card');
@@ -180,7 +199,6 @@
             });
         }
 
-        // Función para agregar productos al carrito
         function addToCart(productId) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             const product = products.find(p => p.id === productId);
@@ -191,7 +209,6 @@
             }
         }
 
-        // Función para mostrar el carrito
         function showCart() {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             let cartContent = 'Carrito de compras:\n';
@@ -201,7 +218,6 @@
             alert(cartContent);
         }
 
-        // Función para vaciar el carrito
         function emptyCart() {
             if (confirm("¿Estás seguro de que deseas vaciar el carrito?")) {
                 localStorage.removeItem('cart');
@@ -210,31 +226,26 @@
             }
         }
 
-        // Función para actualizar el contador del carrito
         function updateCartCount() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             document.getElementById('cart-count').textContent = cart.length;
         }
 
-        // Función para contactar a través de WhatsApp con los productos del carrito
         function contactWhatsApp() {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             if (cart.length === 0) {
                 alert("¡Tu carrito está vacío!");
                 return;
             }
-
             let message = "¡Hola! Estoy interesado en los siguientes productos:\n\n";
             cart.forEach(item => {
                 message += `${item.name} - $${item.price}\n`;
             });
-
-            const phoneNumber = "5493515391020"; // Número de WhatsApp del negocio
+            const phoneNumber = "5493515391020";
             const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
             window.open(url, "_blank");
         }
 
-        // Cargar los productos al inicio
         window.onload = () => {
             loadProducts();
             updateCartCount();
